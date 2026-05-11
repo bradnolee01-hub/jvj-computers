@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { products, categories, Product } from '@/data/products';
 import Header from '@/components/Header';
@@ -8,7 +8,7 @@ import Footer from '@/components/Footer';
 import ProductCard from '@/components/ProductCard';
 import { Search, SlidersHorizontal, X } from 'lucide-react';
 
-export default function Shop() {
+function ShopContent() {
   const searchParams = useSearchParams();
   const categoryParam = searchParams.get('category');
 
@@ -227,5 +227,20 @@ export default function Shop() {
 
       <Footer />
     </>
+  );
+}
+
+export default function Shop() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-primary-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading shop...</p>
+        </div>
+      </div>
+    }>
+      <ShopContent />
+    </Suspense>
   );
 }
